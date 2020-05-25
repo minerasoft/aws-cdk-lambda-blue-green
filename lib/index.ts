@@ -1,1 +1,1 @@
-export * from './aws-cdk-lambda-blue-green';
+export * from './lambda-blue-green';

@@ -1,7 +1,7 @@
 import * as cdk from '@aws-cdk/core';
 import * as lambda from '@aws-cdk/aws-lambda'
 
-export class AwsCdkLambdaBlueGreen extends cdk.Construct {
+export class LambdaBlueGreen extends cdk.Construct {
     constructor(scope: cdk.Construct, id: string) {
         super(scope, id);
 

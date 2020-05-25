@@ -1,6 +1,6 @@
 import * as cdk from '@aws-cdk/core';
 import '@aws-cdk/assert/jest';
-import {AwsCdkLambdaBlueGreen} from "../lib";
+import {LambdaBlueGreen} from "../lib";
 
 describe('Lambda Blue Green Construct', () => {
     let app: cdk.App;
@@ -10,7 +10,7 @@ describe('Lambda Blue Green Construct', () => {
     beforeEach(() => {
         app = new cdk.App();
         myStack = new cdk.Stack(app, "TestStack");
-        myLambda = new AwsCdkLambdaBlueGreen(myStack, 'CreateUser');
+        myLambda = new LambdaBlueGreen(myStack, 'CreateUser');
     })
 
     it('should define a lambda function', () => {

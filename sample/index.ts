@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { AwsCdkLambdaBlueGreenStack } from '../lib';
+import { AwsCdkLambdaBlueGreen } from '../lib';
 
 class SampleStack extends cdk.Stack {
     constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
 
-        new AwsCdkLambdaBlueGreenStack(this, 'CreateUser');
+        new AwsCdkLambdaBlueGreen(this, 'CreateUser');
     }
 }
 

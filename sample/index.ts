@@ -7,7 +7,9 @@ class SampleStack extends cdk.Stack {
     constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
 
-        new LambdaBlueGreen(this, 'CreateUser');
+        new LambdaBlueGreen(this, 'CreateUser', {
+            lambdaAliasName: 'live'
+        });
     }
 }
 

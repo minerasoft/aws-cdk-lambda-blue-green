@@ -1,9 +1,9 @@
 {
   "name": "aws-cdk-lambda-blue-green",
   "version": "0.1.0",
-  "bin": {
-    "aws-cdk-lambda-blue-green": "bin/aws-cdk-lambda-blue-green.js"
-  },
+  "description": "CDK construct for an AWS Lambda function with blue-green/canary deployment configuration.",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -21,7 +21,27 @@
     "typescript": "~3.7.2"
   },
   "dependencies": {
+    "@aws-cdk/aws-lambda": "^1.41.0",
     "@aws-cdk/core": "1.41.0",
     "source-map-support": "^0.5.16"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/minerasoft/aws-cdk-lambda-blue-green.git"
+  },
+  "keywords": [
+    "aws",
+    "cdk",
+    "construct",
+    "library",
+    "lambda",
+    "blue-green",
+    "canary"
+  ],
+  "author": {
+    "name": "Ram Anaswara",
+    "email": "ram@minerasoftware.com",
+    "url": "https://www.minerasoftware.com"
+  },
+  "license": "ISC"
 }

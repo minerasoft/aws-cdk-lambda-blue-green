@@ -9,7 +9,8 @@ class SampleStack extends cdk.Stack {
 
         new LambdaBlueGreen(this, 'CreateUser', {
             lambdaAliasName: 'live',
-            handlerName: 'index.handler'
+            handlerName: 'index.handler',
+            preHookHandlerName: 'pre-hook-index.handler'
         });
     }
 }

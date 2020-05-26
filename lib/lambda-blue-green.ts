@@ -22,6 +22,12 @@ interface LambdaBlueGreenProps {
      * @default LambdaDeploymentConfig.CANARY_10PERCENT_5MINUTES
      */
     readonly deploymentConfig?: ILambdaDeploymentConfig;
+    /**
+     * Name of the Lambda handler for validating the Lambda function being deployed.
+     *
+     * Example: index.handler
+     */
+    readonly preHookHandlerName?: string;
 }
 
 export class LambdaBlueGreen extends cdk.Construct {
@@ -51,9 +57,18 @@ export class LambdaBlueGreen extends cdk.Construct {
             version: internalLambda.currentVersion,
         });
 
-        new codeDeploy.LambdaDeploymentGroup(this, `${this.lambdaName}-DeploymentGroup`, {
+        let deploymentGroup = new codeDeploy.LambdaDeploymentGroup(this, `${this.lambdaName}-DeploymentGroup`, {
             alias,
             deploymentConfig: props.deploymentConfig || codeDeploy.LambdaDeploymentConfig.CANARY_10PERCENT_5MINUTES,
         });
+
+        if (props.preHookHandlerName) {
+            let preHookLambda = new lambda.Function(this, `${this.lambdaName}-PreHook`, {
+                code: lambdaCode,
+                handler: props.preHookHandlerName,
+                runtime: lambda.Runtime.NODEJS_12_X,
+            });
+            deploymentGroup.addPreHook(preHookLambda);
+        }
     }
 }

@@ -63,6 +63,34 @@ describe('Lambda Blue Green Construct', () => {
         });
     })
 
+    describe('with pre hook handler specified', () => {
+        beforeEach(() => {
+            new LambdaBlueGreen(testStack, 'CreateUser', {
+                handlerName: 'index.handler',
+                lambdaAliasName: 'live',
+                preHookHandlerName: 'pre-hook-index.handler'
+            });
+        });
+
+        it('should define a lambda function', () => {
+            expect(testStack).toHaveResourceLike("AWS::Lambda::Function", {
+                Handler: "index.handler",
+                Runtime: "nodejs12.x"
+            });
+        });
+
+        it('should define a lambda pre-hook function', () => {
+            expect(testStack).toHaveResourceLike("AWS::Lambda::Function", {
+                Handler: "pre-hook-index.handler",
+                Runtime: "nodejs12.x"
+            });
+        });
+
+        it.skip(`should have the pre-hook defined in the update policy`, () => {
+            //TODO find a stable way to assert this.
+        });
+    })
+
     test('handler name cannot be empty', () => {
         expect(() => {
             new LambdaBlueGreen(new cdk.Stack(), 'CreateUser', {

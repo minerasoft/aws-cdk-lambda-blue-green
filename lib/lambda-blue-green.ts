@@ -42,7 +42,7 @@ export class LambdaBlueGreen extends cdk.Construct {
 
         let internalLambda = new lambda.Function(this, `${this.lambdaName}`, {
             code: lambdaCode,
-            handler:  props.handlerName ,
+            handler: props.handlerName,
             runtime: lambda.Runtime.NODEJS_12_X,
         });
 

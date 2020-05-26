@@ -37,7 +37,7 @@ describe('Lambda Blue Green Construct', () => {
             })
         });
 
-        it('should perform canary deployment by default',  () => {
+        it('should perform canary deployment by default', () => {
             expect(getSynthesisedStack(testApp)).toHaveResourceLike("AWS::CodeDeploy::DeploymentGroup", {
                 DeploymentConfigName: "CodeDeployDefault.LambdaCanary10Percent5Minutes",
                 DeploymentStyle: {
@@ -57,7 +57,7 @@ describe('Lambda Blue Green Construct', () => {
             });
         });
 
-        it('should perform the blue/green deployment',  () => {
+        it('should perform the blue/green deployment', () => {
             expect(getSynthesisedStack(testApp)).toHaveResourceLike("AWS::CodeDeploy::DeploymentGroup", {
                 DeploymentConfigName: "CodeDeployDefault.LambdaLinear10PercentEvery10Minutes",
                 DeploymentStyle: {

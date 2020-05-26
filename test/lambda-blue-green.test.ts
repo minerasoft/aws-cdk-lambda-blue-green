@@ -13,6 +13,7 @@ describe('Lambda Blue Green Construct', () => {
         testApp = new cdk.App();
         let testStack = new cdk.Stack(testApp, "TestStack");
         new LambdaBlueGreen(testStack, 'CreateUser', {
+            handlerName: 'index.handler',
             lambdaAliasName: 'live'
         });
     })

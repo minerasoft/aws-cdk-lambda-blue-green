@@ -3,6 +3,11 @@ import * as lambda from '@aws-cdk/aws-lambda'
 
 interface LambdaBlueGreenProps {
     /**
+     * Name of the Lambda handler in the codebase.
+     * Example: index.handler
+     */
+    handlerName: string,
+    /**
      * Name of the Alias used for the deployment of the lambda function.
      * Example: Prod
      */
@@ -19,7 +24,7 @@ export class LambdaBlueGreen extends cdk.Construct {
 
         let internalLambda = new lambda.Function(this, `${this.lambdaName}`, {
             code: lambdaCode,
-            handler: 'index.handler',
+            handler:  props.handlerName ,
             runtime: lambda.Runtime.NODEJS_12_X,
         });
 

@@ -12,9 +12,10 @@ interface LambdaBlueGreenProps {
     readonly handlerName: string;
     /**
      * Name of the Alias used for the deployment of the lambda function.
-     * Example: Prod
+     *
+     * Example: Prod | Stage
      */
-    lambdaAliasName: string,
+    readonly lambdaAliasName: string;
     /**
      * The Deployment Configuration for the Lambda.
      *
@@ -31,6 +32,10 @@ export class LambdaBlueGreen extends cdk.Construct {
 
         if (!props.handlerName) {
             throw new Error('handler name cannot be empty')
+        }
+
+        if (!props.lambdaAliasName) {
+            throw new Error('alias name cannot be empty')
         }
 
         let lambdaCode = lambda.Code.fromCfnParameters();

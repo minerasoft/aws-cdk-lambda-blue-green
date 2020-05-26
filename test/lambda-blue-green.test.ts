@@ -76,4 +76,12 @@ describe('Lambda Blue Green Construct', () => {
         }).toThrowError(/handler name cannot be empty/);
     })
 
+    test('alias name cannot be empty', () => {
+        expect(() => {
+            new LambdaBlueGreen(testStack, 'CreateUser-Test1', {
+                handlerName: 'index.handler',
+                lambdaAliasName: '',
+            });
+        }).toThrowError(/alias name cannot be empty/);
+    })
 });

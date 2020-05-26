@@ -66,4 +66,14 @@ describe('Lambda Blue Green Construct', () => {
             })
         });
     })
+
+    test('handler name cannot be empty', () => {
+        expect(() => {
+            new LambdaBlueGreen(testStack, 'CreateUser-Test', {
+                handlerName: '',
+                lambdaAliasName: 'live',
+            });
+        }).toThrowError(/handler name cannot be empty/);
+    })
+
 });

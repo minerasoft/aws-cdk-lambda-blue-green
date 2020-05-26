@@ -6,9 +6,10 @@ import {ILambdaDeploymentConfig} from "@aws-cdk/aws-codedeploy/lib/lambda/deploy
 interface LambdaBlueGreenProps {
     /**
      * Name of the Lambda handler in the codebase.
+     *
      * Example: index.handler
      */
-    handlerName: string,
+    readonly handlerName: string;
     /**
      * Name of the Alias used for the deployment of the lambda function.
      * Example: Prod
@@ -27,6 +28,10 @@ export class LambdaBlueGreen extends cdk.Construct {
 
     constructor(scope: cdk.Construct, id: string, props: LambdaBlueGreenProps) {
         super(scope, id);
+
+        if (!props.handlerName) {
+            throw new Error('handler name cannot be empty')
+        }
 
         let lambdaCode = lambda.Code.fromCfnParameters();
 

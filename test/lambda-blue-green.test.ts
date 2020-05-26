@@ -3,10 +3,6 @@ import '@aws-cdk/assert/jest';
 import {LambdaBlueGreen} from "../lib";
 import {LambdaDeploymentConfig} from "@aws-cdk/aws-codedeploy";
 
-function getSynthesisedStack(testApp: cdk.App) {
-    return testApp.synth().getStackByName("TestStack");
-}
-
 describe('Lambda Blue Green Construct', () => {
     let testApp: cdk.App;
     let testStack: cdk.Stack;
@@ -25,20 +21,20 @@ describe('Lambda Blue Green Construct', () => {
         })
 
         it('should define a lambda function', () => {
-            expect(getSynthesisedStack(testApp)).toHaveResourceLike("AWS::Lambda::Function", {
+            expect(testStack).toHaveResourceLike("AWS::Lambda::Function", {
                 Handler: "index.handler",
                 Runtime: "nodejs12.x"
             });
         });
 
         it(`should have the 'live' alias`, () => {
-            expect(getSynthesisedStack(testApp)).toHaveResource("AWS::Lambda::Alias", {
+            expect(testStack).toHaveResource("AWS::Lambda::Alias", {
                 Name: 'live'
             })
         });
 
         it('should perform canary deployment by default', () => {
-            expect(getSynthesisedStack(testApp)).toHaveResourceLike("AWS::CodeDeploy::DeploymentGroup", {
+            expect(testStack).toHaveResourceLike("AWS::CodeDeploy::DeploymentGroup", {
                 DeploymentConfigName: "CodeDeployDefault.LambdaCanary10Percent5Minutes",
                 DeploymentStyle: {
                     DeploymentType: "BLUE_GREEN"
@@ -50,7 +46,7 @@ describe('Lambda Blue Green Construct', () => {
 
     describe('with props values overridden', () => {
         beforeEach(() => {
-            new LambdaBlueGreen(testStack, 'CreateUser-PropsOverridden', {
+            new LambdaBlueGreen(testStack, 'CreateUser', {
                 handlerName: 'index.handler',
                 lambdaAliasName: 'live',
                 deploymentConfig: LambdaDeploymentConfig.LINEAR_10PERCENT_EVERY_10MINUTES
@@ -58,7 +54,7 @@ describe('Lambda Blue Green Construct', () => {
         });
 
         it('should perform the blue/green deployment', () => {
-            expect(getSynthesisedStack(testApp)).toHaveResourceLike("AWS::CodeDeploy::DeploymentGroup", {
+            expect(testStack).toHaveResourceLike("AWS::CodeDeploy::DeploymentGroup", {
                 DeploymentConfigName: "CodeDeployDefault.LambdaLinear10PercentEvery10Minutes",
                 DeploymentStyle: {
                     DeploymentType: "BLUE_GREEN"
@@ -69,7 +65,7 @@ describe('Lambda Blue Green Construct', () => {
 
     test('handler name cannot be empty', () => {
         expect(() => {
-            new LambdaBlueGreen(testStack, 'CreateUser-Test', {
+            new LambdaBlueGreen(new cdk.Stack(), 'CreateUser', {
                 handlerName: '',
                 lambdaAliasName: 'live',
             });
@@ -78,7 +74,7 @@ describe('Lambda Blue Green Construct', () => {
 
     test('alias name cannot be empty', () => {
         expect(() => {
-            new LambdaBlueGreen(testStack, 'CreateUser-Test1', {
+            new LambdaBlueGreen(new cdk.Stack(), 'CreateUser', {
                 handlerName: 'index.handler',
                 lambdaAliasName: '',
             });

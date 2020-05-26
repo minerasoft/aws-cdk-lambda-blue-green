@@ -8,7 +8,8 @@ class SampleStack extends cdk.Stack {
         super(scope, id, props);
 
         new LambdaBlueGreen(this, 'CreateUser', {
-            lambdaAliasName: 'live'
+            lambdaAliasName: 'live',
+            handlerName: 'index.handler'
         });
     }
 }

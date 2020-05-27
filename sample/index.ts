@@ -1,20 +1,29 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
-import * as cdk from '@aws-cdk/core';
-import { LambdaBlueGreen } from '../lib';
+import {AppBuilder} from "../lib/app-builder";
 
-class SampleStack extends cdk.Stack {
-    constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
-        super(scope, id, props);
 
-        new LambdaBlueGreen(this, 'CreateUser', {
-            lambdaAliasName: 'live',
-            handlerName: 'index.handler',
-            preHookHandlerName: 'pre-hook-index.handler'
-        });
+new AppBuilder({
+    appName: "UserService",
+    pipelineProps: {
+        codeCommitRepoName: 'pipeline-blue-green-test1',
+        lambdaBuildSpecFile: 'sample/config/lambda-buildspec.yml',
+        // lambdaPreHookBuildSpecFile: 'config/lambda-pre-hook-buildspec.yml',
+        cdkBuildSpecFile: 'sample/config/cdk-buildspec.yml'
     }
-}
+})
+    .addFunction({
+        functionName: "UserCreate",
+        // preHookHandlerName: "userCreatePreHook.handler",
+        handlerName: "userCreate.handler",
+        lambdaAliasName: 'live'
+    })
+    .addFunction({
+        functionName: "UserGet",
+        // preHookHandlerName: "userGetPreHook.handler",
+        handlerName: "userGet.handler",
+        lambdaAliasName: 'live'
+    })
+    .build()
 
-let app = new cdk.App();
-new SampleStack(app, 'SampleApp');
-app.synth();
+

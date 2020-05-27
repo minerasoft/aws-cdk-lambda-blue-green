@@ -1,0 +1,21 @@
+{
+  version: '0.2',
+  phases: {
+    install: {
+      commands: [
+        'cd lambda-test',
+        'npm install',
+      ],
+    },
+    build: {
+      commands: 'npm run build',
+    },
+  },
+  artifacts: {
+    'base-directory': 'lambda-test',
+    files: [
+      'index.js',
+      'node_modules/**/*',
+    ],
+  },
+}

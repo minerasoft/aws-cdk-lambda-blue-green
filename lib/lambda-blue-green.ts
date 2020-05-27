@@ -3,7 +3,9 @@ import * as lambda from '@aws-cdk/aws-lambda'
 import * as codeDeploy from '@aws-cdk/aws-codedeploy'
 import {ILambdaDeploymentConfig} from "@aws-cdk/aws-codedeploy/lib/lambda/deployment-config";
 
-interface LambdaBlueGreenProps {
+export interface LambdaBlueGreenProps {
+
+    readonly functionName?: string;
     /**
      * Name of the Lambda handler in the codebase.
      *

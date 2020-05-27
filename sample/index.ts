@@ -5,7 +5,7 @@ import {AppBuilder} from "../lib/app-builder";
 
 new AppBuilder({
     appName: "UserService",
-    pipelineProps: {
+    pipelineConfig: {
         codeCommitRepoName: 'pipeline-blue-green-test1',
         codeCommitRepoBranchName: 'pipeline-blue-green-test1',
         lambdaBuildSpecFile: 'sample/config/lambda-buildspec.yml',

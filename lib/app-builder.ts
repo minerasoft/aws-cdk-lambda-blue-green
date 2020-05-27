@@ -1,11 +1,11 @@
 import * as cdk from "@aws-cdk/core";
 import * as lambda from "@aws-cdk/aws-lambda";
-import {LambdaBlueGreen, LambdaBlueGreenProps} from "./lambda-blue-green";
-import {Pipeline, PipelineInternalProps, PipelineProps} from "./pipeline";
+import {LambdaBlueGreen, LambdaBlueGreenConfig} from "./lambda-blue-green";
+import {Pipeline, PipelineConfig} from "./pipeline";
 
 class LambdaStack extends cdk.Stack {
     public readonly lambdaCode: lambda.CfnParametersCode;
-    constructor(scope: cdk.App, id: string, lambdas: LambdaBlueGreenProps[]) {
+    constructor(scope: cdk.App, id: string, lambdas: LambdaBlueGreenConfig[]) {
         super(scope, id);
 
         //Pass CfnParametersCode to a Lambda Function before accessing the bucketNameParam property
@@ -13,7 +13,7 @@ class LambdaStack extends cdk.Stack {
 
         lambdas.forEach(props => {
             new LambdaBlueGreen(this, props.functionName, {
-                lambdaBlueGreenProps: props,
+                lambdaBlueGreenConfig: props,
                 lambdaCode: this.lambdaCode
             });
         });
@@ -21,38 +21,47 @@ class LambdaStack extends cdk.Stack {
 }
 
 class PipelineStack extends cdk.Stack {
-    constructor(scope: cdk.App, id: string, props: PipelineProps, lambdaStack: LambdaStack) {
+    constructor(scope: cdk.App, id: string, props: PipelineConfig, lambdaStack: LambdaStack) {
         super(scope, id);
 
         new Pipeline(this, `Pipeline`, {
-            pipelineProps: props,
+            pipelineConfig: props,
             lambdaCode: lambdaStack.lambdaCode
         });
     }
 }
 
-export interface AppBuilderProps {
+export interface AppBuilderConfig {
+    /**
+     * Name of the application.
+     *
+     * Example: User Service
+     */
     appName: string,
-    pipelineProps: PipelineProps
+
+    /**
+     * Configuration for the pipeline for building and deploying serverless resources.
+     */
+    pipelineConfig: PipelineConfig
 }
 
 export class AppBuilder extends cdk.App {
-    private props: AppBuilderProps;
-    private readonly lambdaProps: LambdaBlueGreenProps[];
+    private props: AppBuilderConfig;
+    private readonly lambdaProps: LambdaBlueGreenConfig[];
 
-    constructor(props: AppBuilderProps) {
+    constructor(props: AppBuilderConfig) {
         super()
         this.props = props;
         this.lambdaProps = []
     }
 
-    addFunction(lambdaBlueGreenProps: LambdaBlueGreenProps): AppBuilder {
+    addFunction(lambdaBlueGreenProps: LambdaBlueGreenConfig): AppBuilder {
         this.lambdaProps.push(lambdaBlueGreenProps);
         return this;
     }
 
     build() {
         let lambdaStack = new LambdaStack(this, `${this.props.appName}-LambdasStack`, this.lambdaProps)
-        new PipelineStack(this, `${this.props.appName}-PipelineStack`, this.props.pipelineProps, lambdaStack);
+        new PipelineStack(this, `${this.props.appName}-PipelineStack`, this.props.pipelineConfig, lambdaStack);
     }
 }

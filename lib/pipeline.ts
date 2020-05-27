@@ -6,34 +6,54 @@ import * as codeBuild from '@aws-cdk/aws-codebuild';
 import * as lambda from '@aws-cdk/aws-lambda';
 
 export interface PipelineProps {
-    codeCommitRepoName: string,
-    codeCommitRepoBranchName?: string,
-    lambdaBuildSpecFile: string
-    cdkBuildSpecFile: string,
+    /**
+     * Props required for the configuration of the pipeline.
+     */
+    readonly pipelineConfig: PipelineConfig,
+
+    /**
+     * Lambda code as cloud formation parameters. The value is supplied to this stack during the code deploy as
+     * parameter override.
+     */
+    readonly lambdaCode: lambda.CfnParametersCode;
 }
 
-export interface PipelineInternalProps {
-    pipelineProps: PipelineProps,
-    readonly lambdaCode: lambda.CfnParametersCode;
+export interface PipelineConfig {
+    /**
+     * Name of the code-commit repo for which a commit triggers the build.
+     */
+    codeCommitRepoName: string,
+
+    /**
+     * Name of the code-commit repo branch for which a commit triggers the build.
+     */
+    codeCommitRepoBranchName?: string,
+
+    /**
+     * Path to the file with build instructions in aws build spec format.
+     */
+    lambdaBuildSpecFile: string
+
+    cdkBuildSpecFile: string,
 }
 
 export class Pipeline extends cdk.Construct {
 
-    constructor(scope: cdk.Construct, id: string, props: PipelineInternalProps) {
+    constructor(scope: cdk.Construct, id: string, props: PipelineProps) {
         super(scope, id)
 
-        const code = codeCommit.Repository.fromRepositoryName(this, 'ImportedRepo',
-            props.pipelineProps.codeCommitRepoName);
+        const code = codeCommit.Repository.fromRepositoryName(this, 'CodeCommitRepo',
+            props.pipelineConfig.codeCommitRepoName);
 
         const lambdaBuild = new codeBuild.PipelineProject(this, 'LambdaBuild', {
-            buildSpec: codeBuild.BuildSpec.fromSourceFilename(props.pipelineProps.lambdaBuildSpecFile),
+            buildSpec: codeBuild.BuildSpec.fromSourceFilename(props.pipelineConfig.lambdaBuildSpecFile),
             environment: {
                 buildImage: codeBuild.LinuxBuildImage.STANDARD_2_0,
             },
         });
 
         const cdkBuild = new codeBuild.PipelineProject(this, 'CdkBuild', {
-            buildSpec: codeBuild.BuildSpec.fromSourceFilename(props.pipelineProps.cdkBuildSpecFile),
+            buildSpec: codeBuild.BuildSpec.fromSourceFilename(props.pipelineConfig.cdkBuildSpecFile),
             environment: {
                 buildImage: codeBuild.LinuxBuildImage.STANDARD_2_0,
             },
@@ -67,7 +87,7 @@ export class Pipeline extends cdk.Construct {
                             actionName: 'CodeCommit_Source',
                             repository: code,
                             output: sourceOutput,
-                            branch:  props.pipelineProps.codeCommitRepoBranchName || 'master'
+                            branch:  props.pipelineConfig.codeCommitRepoBranchName || 'master'
                         }),
                     ],
                 },

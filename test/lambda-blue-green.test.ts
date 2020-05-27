@@ -17,7 +17,7 @@ describe('Lambda Blue Green Construct', () => {
         beforeEach(() => {
             new LambdaBlueGreen(testStack, 'UserService', {
                 lambdaCode: lambda.Code.fromCfnParameters(),
-                lambdaBlueGreenProps: {
+                lambdaBlueGreenConfig: {
                     functionName: 'CreateUser',
                     handlerName: 'index.handler',
                     lambdaAliasName: 'live',
@@ -53,7 +53,7 @@ describe('Lambda Blue Green Construct', () => {
         beforeEach(() => {
             new LambdaBlueGreen(testStack, 'UserService', {
                 lambdaCode: lambda.Code.fromCfnParameters(),
-                lambdaBlueGreenProps: {
+                lambdaBlueGreenConfig: {
                     functionName: 'CreateUser',
                     handlerName: 'index.handler',
                     lambdaAliasName: 'live',
@@ -76,7 +76,7 @@ describe('Lambda Blue Green Construct', () => {
         beforeEach(() => {
             new LambdaBlueGreen(testStack, 'UserService', {
                 lambdaCode: lambda.Code.fromCfnParameters(),
-                lambdaBlueGreenProps: {
+                lambdaBlueGreenConfig: {
                     functionName: 'CreateUser',
                     handlerName: 'index.handler',
                     lambdaAliasName: 'live',
@@ -108,7 +108,7 @@ describe('Lambda Blue Green Construct', () => {
         expect(() => {
             new LambdaBlueGreen(new cdk.Stack(), 'UserService', {
                 lambdaCode: lambda.Code.fromCfnParameters(),
-                lambdaBlueGreenProps: {
+                lambdaBlueGreenConfig: {
                     functionName: 'CreateUser',
                     handlerName: '',
                     lambdaAliasName: 'live',
@@ -121,7 +121,7 @@ describe('Lambda Blue Green Construct', () => {
         expect(() => {
             new LambdaBlueGreen(new cdk.Stack(), 'UserService', {
                 lambdaCode: lambda.Code.fromCfnParameters(),
-                lambdaBlueGreenProps: {
+                lambdaBlueGreenConfig: {
                     functionName: 'CreateUser',
                     handlerName: 'index.handler',
                     lambdaAliasName: '',
@@ -134,7 +134,7 @@ describe('Lambda Blue Green Construct', () => {
         expect(() => {
             new LambdaBlueGreen(new cdk.Stack(), 'UserService', {
                 lambdaCode: lambda.Code.fromCfnParameters(),
-                lambdaBlueGreenProps: {
+                lambdaBlueGreenConfig: {
                     functionName: '',
                     handlerName: 'index.handler',
                     lambdaAliasName: 'live',

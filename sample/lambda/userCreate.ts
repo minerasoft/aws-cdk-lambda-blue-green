@@ -3,6 +3,6 @@ export async function handler(event: any) {
     return {
         statusCode: 200,
         headers: { "Content-Type": "text/plain" },
-        body: `User Create V2`
+        body: `User Create V3`
     };
 }

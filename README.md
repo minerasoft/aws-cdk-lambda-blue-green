@@ -84,6 +84,5 @@ Pre-hook lambda execution and traffic shifting during the deployment.
 
 ## References
  * [AWS-CDK](https://docs.aws.amazon.com/cdk/latest/guide/home.html)
- * [CodeDeploy Lambda Deployments](https://docs.aws.amazon.com/codedeploy/latest/userguide/applications-create-lambda
- .html)
+ * [CodeDeploy Lambda Deployments](https://docs.aws.amazon.com/codedeploy/latest/userguide/applications-create-lambda.html)
 

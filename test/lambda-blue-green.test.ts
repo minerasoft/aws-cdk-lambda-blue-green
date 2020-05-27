@@ -7,7 +7,6 @@ import * as lambda from '@aws-cdk/aws-lambda'
 describe('Lambda Blue Green Construct', () => {
     let testApp: cdk.App;
     let testStack: cdk.Stack;
-    let lambdaCode = lambda.Code.fromCfnParameters()
 
     beforeEach(() => {
         testApp = new cdk.App();
@@ -17,10 +16,11 @@ describe('Lambda Blue Green Construct', () => {
     describe('with default props values', () => {
         beforeEach(() => {
             new LambdaBlueGreen(testStack, 'CreateUser', {
-                lambdaCode: lambdaCode,
+                lambdaCode: lambda.Code.fromCfnParameters(),
                 lambdaBlueGreenProps: {
                     handlerName: 'index.handler',
                     lambdaAliasName: 'live',
+                    preHookHandlerName: 'preHook.handler'
                 }
             });
         })
@@ -52,10 +52,11 @@ describe('Lambda Blue Green Construct', () => {
     describe('with props values overridden', () => {
         beforeEach(() => {
             new LambdaBlueGreen(testStack, 'CreateUser', {
-                lambdaCode: lambdaCode,
+                lambdaCode: lambda.Code.fromCfnParameters(),
                 lambdaBlueGreenProps: {
                     handlerName: 'index.handler',
                     lambdaAliasName: 'live',
+                    preHookHandlerName: 'preHook.handler',
                     deploymentConfig: LambdaDeploymentConfig.LINEAR_10PERCENT_EVERY_10MINUTES
                 }
             });
@@ -74,7 +75,7 @@ describe('Lambda Blue Green Construct', () => {
     describe('with pre hook handler specified', () => {
         beforeEach(() => {
             new LambdaBlueGreen(testStack, 'CreateUser', {
-                lambdaCode: lambdaCode,
+                lambdaCode: lambda.Code.fromCfnParameters(),
                 lambdaBlueGreenProps: {
                     handlerName: 'index.handler',
                     lambdaAliasName: 'live',
@@ -105,10 +106,11 @@ describe('Lambda Blue Green Construct', () => {
     test('handler name cannot be empty', () => {
         expect(() => {
             new LambdaBlueGreen(new cdk.Stack(), 'CreateUser', {
-                lambdaCode: lambdaCode,
+                lambdaCode: lambda.Code.fromCfnParameters(),
                 lambdaBlueGreenProps: {
                     handlerName: '',
                     lambdaAliasName: 'live',
+                    preHookHandlerName: 'preHook.handler'
                 }
             });
         }).toThrowError(/handler name cannot be empty/);
@@ -117,10 +119,11 @@ describe('Lambda Blue Green Construct', () => {
     test('alias name cannot be empty', () => {
         expect(() => {
             new LambdaBlueGreen(new cdk.Stack(), 'CreateUser', {
-                lambdaCode: lambdaCode,
+                lambdaCode: lambda.Code.fromCfnParameters(),
                 lambdaBlueGreenProps: {
                     handlerName: 'index.handler',
                     lambdaAliasName: '',
+                    preHookHandlerName: 'preHook.handler'
                 }
             });
         }).toThrowError(/alias name cannot be empty/);

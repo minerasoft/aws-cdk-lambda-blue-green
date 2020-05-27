@@ -61,11 +61,14 @@ cdk deploy UserService-PipelineStack --profile dev
 
 ## Pipeline View
 Once the pipeline stack is deployed and a commit is made to the origin the pipeline is triggered.
-![Pipeline](./screenshots/Pipeline.png)
+![Pipeline]
+(./screenshots/Pipeline.png)
 
 Blue green deployment for the two lambdas.
-![Blue-Green](./screenshots/blue-green.png)
+![Blue-Green]
+(./screenshots/blue-green.png)
 
 Pre-hook lambda execution and traffic shifting during the deployment.
-![Traffic-shifting](./screenshots/traffic-shifting.png)
+![Traffic-shifting]
+(./screenshots/traffic-shifting.png)
 

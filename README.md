@@ -13,7 +13,7 @@
   approach. Not sure if I have over-engineered it a bit :)  
 
 ## Usage
- A sample project using these constructs and builder classes can be found under `sample` folder.
+ A sample project using these constructs and builder classes can be found under the `sample` folder.
  
  The following code snippet will create a pipeline and two lambda functions in the specified aws account.
  
@@ -41,8 +41,18 @@
      })
      .build()   
  ``` 
+
+The lambda handlers inside the sample folder:
+```
+└── lambda
+    ├── userCreate.ts                   # Create User Function (demostration purpose only)
+    ├── userCreateValidatorPreHook.ts   # Validation pre-kook function 
+    ├── userGet.ts                      # Get User Function (demostration purpose only)
+    └── userGetValidatorPreHook.ts      # Validation pre-kook function 
+
+```
 ## Deployment of the Pipeline
-The above snippet will create two stacks one for the Pipeline and second for all lambda and related resources.
+The above snippet will create two stacks one for the pipeline and second for the lambda and related resources.
 
  * Build the project and execute tests
 ```
@@ -53,7 +63,7 @@ npm run test
 ```
 cdk list UserService-PipelineStack
 ```
- * View the synthesised cloud formation template and deploy the stack
+ * View the synthesised cloud formation template and then deploy the stack
 ```
 cdk synth UserService-PipelineStack
 cdk deploy UserService-PipelineStack --profile dev
@@ -68,4 +78,8 @@ Blue green deployment for the two lambdas.
 
 Pre-hook lambda execution and traffic shifting during the deployment.
 ![Traffic-shifting](./screenshots/traffic-shifting.png)
+
+## References
+[AWS-CDK](https://docs.aws.amazon.com/cdk/latest/guide/home.html)
+[CodeDeploy Lambda Deployments](https://docs.aws.amazon.com/codedeploy/latest/userguide/applications-create-lambda.html)
 

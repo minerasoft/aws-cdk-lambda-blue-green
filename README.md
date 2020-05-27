@@ -66,6 +66,6 @@ Once the pipeline stack is deployed and a commit is made to the origin the pipel
 Blue green deployment for the two lambdas.
 ![Blue-Green](./screenshots/blue-green.png)
 
-Pre-hook lambda execution and traffic shifting during the deployment.![Traffic-shifting]
-(./screenshots/traffic-shifting.png)
+Pre-hook lambda execution and traffic shifting during the deployment.
+![Traffic-shifting](./screenshots/traffic-shifting.png)
 

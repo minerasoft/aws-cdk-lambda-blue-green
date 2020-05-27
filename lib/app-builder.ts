@@ -22,12 +22,12 @@ class LambdaStack extends cdk.Stack {
 }
 
 class PipelineStack extends cdk.Stack {
-    constructor(scope: cdk.App, id: string, props: PipelineProps, lambdaCode: lambda.CfnParametersCode) {
+    constructor(scope: cdk.App, id: string, props: PipelineProps, lambdaStack: LambdaStack) {
         super(scope, id);
 
         new Pipeline(this, 'CreateUserPipeline', {
             pipelineProps: props,
-            lambdaCode: lambdaCode
+            lambdaCode: lambdaStack.lambdaCode
         });
     }
 }
@@ -54,6 +54,6 @@ export class AppBuilder extends cdk.App {
 
     build() {
         let lambdaStack = new LambdaStack(this, `${this.props.appName}-LambdasStack`, this.lambdaProps)
-        new PipelineStack(this, `${this.props.appName}-PipelineStack`, this.props.pipelineProps, lambdaStack.lambdaCode);
+        new PipelineStack(this, `${this.props.appName}-PipelineStack`, this.props.pipelineProps, lambdaStack);
     }
 }

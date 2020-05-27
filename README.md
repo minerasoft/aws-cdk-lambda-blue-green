@@ -58,3 +58,14 @@ cdk list UserService-PipelineStack
 cdk synth UserService-PipelineStack
 cdk deploy UserService-PipelineStack --profile dev
 ``` 
+
+## Pipeline View
+Once the pipeline stack is deployed and a commit is made to the origin the pipeline is triggered.
+![Pipeline](./screenshots/Pipeline.png)
+
+Blue green deployment for the two lambdas.
+![Blue-Green](./screenshots/blue-green.png)
+
+Pre-hook lambda execution and traffic shifting during the deployment.
+![Traffic-shifting](./screenshots/traffic-shifting.png)
+

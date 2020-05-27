@@ -34,7 +34,7 @@ export interface LambdaBlueGreenProps {
      *
      * Example: index.handler
      */
-    readonly preHookHandlerName?: string;
+    readonly preHookHandlerName: string;
 }
 
 export class LambdaBlueGreen extends cdk.Construct {
@@ -63,18 +63,25 @@ export class LambdaBlueGreen extends cdk.Construct {
             version: internalLambda.currentVersion,
         });
 
+        let preHookLambda = new lambda.Function(this, `${this.lambdaName}-PreHook`, {
+            code: props.lambdaCode,
+            handler: props.lambdaBlueGreenProps.preHookHandlerName,
+            runtime: lambda.Runtime.NODEJS_12_X,
+        });
+
         let deploymentGroup = new codeDeploy.LambdaDeploymentGroup(this, `${this.lambdaName}-DeploymentGroup`, {
             alias,
             deploymentConfig: props.lambdaBlueGreenProps.deploymentConfig || codeDeploy.LambdaDeploymentConfig.CANARY_10PERCENT_5MINUTES,
+            preHook: preHookLambda
         });
 
-        if (props.lambdaBlueGreenProps.preHookHandlerName) {
-            let preHookLambda = new lambda.Function(this, `${this.lambdaName}-PreHook`, {
-                code: props.lambdaCode,
-                handler: props.lambdaBlueGreenProps.preHookHandlerName,
-                runtime: lambda.Runtime.NODEJS_12_X,
-            });
-            deploymentGroup.addPreHook(preHookLambda);
-        }
+        // if (props.lambdaBlueGreenProps.preHookHandlerName) {
+        //     let preHookLambda = new lambda.Function(this, `${this.lambdaName}-PreHook`, {
+        //         code: props.lambdaCode,
+        //         handler: props.lambdaBlueGreenProps.preHookHandlerName,
+        //         runtime: lambda.Runtime.NODEJS_12_X,
+        //     });
+        //     deploymentGroup.addPreHook(preHookLambda);
+        // }
     }
 }

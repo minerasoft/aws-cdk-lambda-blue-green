@@ -13,7 +13,7 @@ class LambdaStack extends cdk.Stack {
         this.lambdaCode = lambda.Code.fromCfnParameters();
 
         lambdas.forEach(props => {
-            new LambdaBlueGreen(this, props.functionName || 'func', {
+            new LambdaBlueGreen(this, props.functionName, {
                 lambdaBlueGreenProps: props,
                 lambdaCode: this.lambdaCode
             });

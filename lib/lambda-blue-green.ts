@@ -10,7 +10,7 @@ export interface LambdaBlueGreenPropsInternal {
 
 export interface LambdaBlueGreenProps {
 
-    readonly functionName?: string;
+    readonly functionName: string;
     /**
      * Name of the Lambda handler in the codebase.
      *

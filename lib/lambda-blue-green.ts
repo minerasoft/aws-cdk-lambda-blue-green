@@ -52,6 +52,7 @@ export class LambdaBlueGreen extends cdk.Construct {
             code: lambdaCode,
             handler: props.handlerName,
             runtime: lambda.Runtime.NODEJS_12_X,
+            description: `${new Date().toISOString()}`
         });
 
         let alias = new lambda.Alias(this, `${this.lambdaName}-Alias`, {

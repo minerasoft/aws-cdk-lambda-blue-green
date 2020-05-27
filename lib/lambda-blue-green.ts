@@ -69,10 +69,10 @@ export class LambdaBlueGreen extends cdk.Construct {
             runtime: lambda.Runtime.NODEJS_12_X,
         });
 
-        let deploymentGroup = new codeDeploy.LambdaDeploymentGroup(this, `${this.lambdaName}-DeploymentGroup`, {
+        let deploymentGroup = new codeDeploy.LambdaDeploymentGroup(this, `${this.lambdaName}-DeploymentGroup-Prehook`, {
             alias,
             deploymentConfig: props.lambdaBlueGreenProps.deploymentConfig || codeDeploy.LambdaDeploymentConfig.CANARY_10PERCENT_5MINUTES,
-            preHook: preHookLambda
+            preHook: preHookLambda,
         });
 
         // if (props.lambdaBlueGreenProps.preHookHandlerName) {

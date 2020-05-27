@@ -10,7 +10,13 @@ export interface LambdaBlueGreenPropsInternal {
 
 export interface LambdaBlueGreenProps {
 
+    /**
+     * Name of the function.
+     *
+     * Example: CreateUser
+     */
     readonly functionName: string;
+
     /**
      * Name of the Lambda handler in the codebase.
      *
@@ -29,12 +35,14 @@ export interface LambdaBlueGreenProps {
      * @default LambdaDeploymentConfig.CANARY_10PERCENT_5MINUTES
      */
     readonly deploymentConfig?: ILambdaDeploymentConfig;
+
     /**
      * Name of the Lambda handler for validating the Lambda function being deployed.
+     * This parameter is optional.
      *
      * Example: index.handler
      */
-    readonly preHookHandlerName: string;
+    readonly preHookHandlerName?: string;
 }
 
 export class LambdaBlueGreen extends cdk.Construct {
@@ -42,6 +50,10 @@ export class LambdaBlueGreen extends cdk.Construct {
 
     constructor(scope: cdk.Construct, id: string, props: LambdaBlueGreenPropsInternal) {
         super(scope, id);
+
+        if (!props.lambdaBlueGreenProps.functionName) {
+            throw new Error('function name cannot be empty')
+        }
 
         if (!props.lambdaBlueGreenProps.handlerName) {
             throw new Error('handler name cannot be empty')

@@ -21,7 +21,6 @@ describe('Lambda Blue Green Construct', () => {
                     functionName: 'CreateUser',
                     handlerName: 'index.handler',
                     lambdaAliasName: 'live',
-                    preHookHandlerName: 'preHook.handler'
                 }
             });
         })
@@ -58,7 +57,6 @@ describe('Lambda Blue Green Construct', () => {
                     functionName: 'CreateUser',
                     handlerName: 'index.handler',
                     lambdaAliasName: 'live',
-                    preHookHandlerName: 'preHook.handler',
                     deploymentConfig: LambdaDeploymentConfig.LINEAR_10PERCENT_EVERY_10MINUTES
                 }
             });
@@ -114,7 +112,6 @@ describe('Lambda Blue Green Construct', () => {
                     functionName: 'CreateUser',
                     handlerName: '',
                     lambdaAliasName: 'live',
-                    preHookHandlerName: 'preHook.handler'
                 }
             });
         }).toThrowError(/handler name cannot be empty/);
@@ -128,9 +125,21 @@ describe('Lambda Blue Green Construct', () => {
                     functionName: 'CreateUser',
                     handlerName: 'index.handler',
                     lambdaAliasName: '',
-                    preHookHandlerName: 'preHook.handler'
                 }
             });
         }).toThrowError(/alias name cannot be empty/);
+    })
+
+    test('function name cannot be empty', () => {
+        expect(() => {
+            new LambdaBlueGreen(new cdk.Stack(), 'UserService', {
+                lambdaCode: lambda.Code.fromCfnParameters(),
+                lambdaBlueGreenProps: {
+                    functionName: '',
+                    handlerName: 'index.handler',
+                    lambdaAliasName: 'live',
+                }
+            });
+        }).toThrowError(/function name cannot be empty/);
     })
 });

@@ -80,6 +80,7 @@ export class Pipeline extends cdk.Construct {
                             actionName: 'CodeCommit_Source',
                             repository: code,
                             output: sourceOutput,
+                            branch: 'pipeline-blue-green-test1' //FIXME
                         }),
                     ],
                 },

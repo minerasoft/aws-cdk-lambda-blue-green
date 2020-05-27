@@ -3,13 +3,12 @@ import * as lambda from "@aws-cdk/aws-lambda";
 import {LambdaBlueGreen, LambdaBlueGreenProps} from "./lambda-blue-green";
 import {Pipeline, PipelineInternalProps, PipelineProps} from "./pipeline";
 
-//Pass CfnParametersCode to a Lambda Function before accessing the bucketNameParam property
-
 class LambdaStack extends cdk.Stack {
     public readonly lambdaCode: lambda.CfnParametersCode;
     constructor(scope: cdk.App, id: string, lambdas: LambdaBlueGreenProps[]) {
         super(scope, id);
 
+        //Pass CfnParametersCode to a Lambda Function before accessing the bucketNameParam property
         this.lambdaCode = lambda.Code.fromCfnParameters();
 
         lambdas.forEach(props => {
@@ -25,7 +24,7 @@ class PipelineStack extends cdk.Stack {
     constructor(scope: cdk.App, id: string, props: PipelineProps, lambdaStack: LambdaStack) {
         super(scope, id);
 
-        new Pipeline(this, 'CreateUserPipeline', {
+        new Pipeline(this, `Pipeline`, {
             pipelineProps: props,
             lambdaCode: lambdaStack.lambdaCode
         });

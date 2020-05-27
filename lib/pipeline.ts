@@ -100,7 +100,7 @@ export class Pipeline extends cdk.Construct {
                         new FixedStackAction({
                             actionName: 'Lambda_CFN_Deploy',
                             templatePath: cdkBuildOutput.atPath('UserService-LambdasStack.template.json'),
-                            stackName: 'LambdaDeploymentStack',
+                            stackName: 'LambdaDeploymentStack-v2',
                             adminPermissions: true,
                             parameterOverrides: {
                                 ...props.lambdaCode.assign(lambdaBuildOutput.s3Location),

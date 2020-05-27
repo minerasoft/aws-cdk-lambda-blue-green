@@ -71,15 +71,19 @@ cdk deploy UserService-PipelineStack --profile dev
 
 ## Pipeline View
 Once the pipeline stack is deployed and a commit is made to the origin the pipeline is triggered.
+
 ![Pipeline](./screenshots/Pipeline.png)
 
 Blue green deployment for the two lambdas.
+
 ![Blue-Green](./screenshots/blue-green.png)
 
 Pre-hook lambda execution and traffic shifting during the deployment.
+
 ![Traffic-shifting](./screenshots/traffic-shifting.png)
 
 ## References
-[AWS-CDK](https://docs.aws.amazon.com/cdk/latest/guide/home.html)
-[CodeDeploy Lambda Deployments](https://docs.aws.amazon.com/codedeploy/latest/userguide/applications-create-lambda.html)
+ * [AWS-CDK](https://docs.aws.amazon.com/cdk/latest/guide/home.html)
+ * [CodeDeploy Lambda Deployments](https://docs.aws.amazon.com/codedeploy/latest/userguide/applications-create-lambda
+ .html)
 

@@ -7,8 +7,8 @@ new AppBuilder({
     appName: "UserService",
     pipelineProps: {
         codeCommitRepoName: 'pipeline-blue-green-test1',
+        codeCommitRepoBranchName: 'pipeline-blue-green-test1',
         lambdaBuildSpecFile: 'sample/config/lambda-buildspec.yml',
-        //lambdaPreHookBuildSpecFile: 'config/lambda-pre-hook-buildspec.yml',
         cdkBuildSpecFile: 'sample/config/cdk-buildspec.yml'
     }
 })

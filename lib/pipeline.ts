@@ -7,8 +7,8 @@ import * as lambda from '@aws-cdk/aws-lambda';
 
 export interface PipelineProps {
     codeCommitRepoName: string,
+    codeCommitRepoBranchName?: string,
     lambdaBuildSpecFile: string
-    lambdaPreHookBuildSpecFile?: string
     cdkBuildSpecFile: string,
 }
 
@@ -32,16 +32,6 @@ export class Pipeline extends cdk.Construct {
             },
         });
 
-        let lambdaTestBuild;
-        if (props.pipelineProps.lambdaPreHookBuildSpecFile) {
-            lambdaTestBuild = new codeBuild.PipelineProject(this, 'LambdaTestBuild', {
-                buildSpec: codeBuild.BuildSpec.fromSourceFilename(props.pipelineProps.lambdaPreHookBuildSpecFile),
-                environment: {
-                    buildImage: codeBuild.LinuxBuildImage.STANDARD_2_0,
-                },
-            });
-        }
-
         const cdkBuild = new codeBuild.PipelineProject(this, 'CdkBuild', {
             buildSpec: codeBuild.BuildSpec.fromSourceFilename(props.pipelineProps.cdkBuildSpecFile),
             environment: {
@@ -51,7 +41,6 @@ export class Pipeline extends cdk.Construct {
 
         const sourceOutput = new codePipeline.Artifact();
         const lambdaBuildOutput = new codePipeline.Artifact('LambdaBuildOutput');
-        const lambdaTestBuildOutput = new codePipeline.Artifact('LambdaTestBuildOutput');
         const cdkBuildOutput = new codePipeline.Artifact('CdkBuildOutput');
 
         let buildActions = [
@@ -68,14 +57,6 @@ export class Pipeline extends cdk.Construct {
                 outputs: [cdkBuildOutput],
             })
         ];
-        if (lambdaTestBuild) {
-            buildActions.push(new codepipeline_actions.CodeBuildAction({
-                actionName: 'Lambda_Test_Build',
-                project: lambdaTestBuild,
-                input: sourceOutput,
-                outputs: [lambdaTestBuildOutput],
-            }));
-        }
 
         new codePipeline.Pipeline(this, 'InternalPipeline', {
             stages: [
@@ -86,7 +67,7 @@ export class Pipeline extends cdk.Construct {
                             actionName: 'CodeCommit_Source',
                             repository: code,
                             output: sourceOutput,
-                            branch: 'pipeline-blue-green-test1' //FIXME
+                            branch:  props.pipelineProps.codeCommitRepoBranchName || 'master'
                         }),
                     ],
                 },
@@ -100,7 +81,7 @@ export class Pipeline extends cdk.Construct {
                         new FixedStackAction({
                             actionName: 'Lambda_CFN_Deploy',
                             templatePath: cdkBuildOutput.atPath('UserService-LambdasStack.template.json'),
-                            stackName: 'LambdaDeploymentStack-v2',
+                            stackName: `UserService-LambdasStack`,
                             adminPermissions: true,
                             parameterOverrides: {
                                 ...props.lambdaCode.assign(lambdaBuildOutput.s3Location),

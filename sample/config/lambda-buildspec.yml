@@ -16,6 +16,8 @@
     files: [
       'userCreate.js',
       'userGet.js',
+      'userGetValidatorPreHook.js',
+      'userCreateValidatorPreHook.js',
       'node_modules/**/*',
     ],
   },

@@ -3,33 +3,39 @@ import * as codePipeline from '@aws-cdk/aws-codepipeline'
 import * as codepipeline_actions from '@aws-cdk/aws-codepipeline-actions';
 import * as codeCommit from '@aws-cdk/aws-codecommit';
 import * as codeBuild from '@aws-cdk/aws-codebuild';
+import * as lambda from '@aws-cdk/aws-lambda';
 
 export interface PipelineProps {
     codeCommitRepoName: string,
     lambdaBuildSpecFile: string
     lambdaPreHookBuildSpecFile?: string
-    cdkBuildSpecFile: string
+    cdkBuildSpecFile: string,
+}
+
+export interface PipelineInternalProps {
+    pipelineProps: PipelineProps,
+    readonly lambdaCode: lambda.CfnParametersCode;
 }
 
 export class Pipeline extends cdk.Construct {
 
-    constructor(scope: cdk.Construct, id: string, props: PipelineProps) {
+    constructor(scope: cdk.Construct, id: string, props: PipelineInternalProps) {
         super(scope, id)
 
         const code = codeCommit.Repository.fromRepositoryName(this, 'ImportedRepo',
-            props.codeCommitRepoName);
+            props.pipelineProps.codeCommitRepoName);
 
         const lambdaBuild = new codeBuild.PipelineProject(this, 'LambdaBuild', {
-            buildSpec: codeBuild.BuildSpec.fromSourceFilename(props.lambdaBuildSpecFile),
+            buildSpec: codeBuild.BuildSpec.fromSourceFilename(props.pipelineProps.lambdaBuildSpecFile),
             environment: {
                 buildImage: codeBuild.LinuxBuildImage.STANDARD_2_0,
             },
         });
 
         let lambdaTestBuild;
-        if (props.lambdaPreHookBuildSpecFile) {
+        if (props.pipelineProps.lambdaPreHookBuildSpecFile) {
             lambdaTestBuild = new codeBuild.PipelineProject(this, 'LambdaTestBuild', {
-                buildSpec: codeBuild.BuildSpec.fromSourceFilename(props.lambdaPreHookBuildSpecFile),
+                buildSpec: codeBuild.BuildSpec.fromSourceFilename(props.pipelineProps.lambdaPreHookBuildSpecFile),
                 environment: {
                     buildImage: codeBuild.LinuxBuildImage.STANDARD_2_0,
                 },
@@ -37,7 +43,7 @@ export class Pipeline extends cdk.Construct {
         }
 
         const cdkBuild = new codeBuild.PipelineProject(this, 'CdkBuild', {
-            buildSpec: codeBuild.BuildSpec.fromSourceFilename(props.cdkBuildSpecFile),
+            buildSpec: codeBuild.BuildSpec.fromSourceFilename(props.pipelineProps.cdkBuildSpecFile),
             environment: {
                 buildImage: codeBuild.LinuxBuildImage.STANDARD_2_0,
             },
@@ -87,8 +93,33 @@ export class Pipeline extends cdk.Construct {
                 {
                     stageName: 'Build',
                     actions: buildActions,
-                }
+                },
+                {
+                    stageName: 'Deploy',
+                    actions: [
+                        new FixedStackAction({
+                            actionName: 'Lambda_CFN_Deploy',
+                            templatePath: cdkBuildOutput.atPath('UserService-LambdasStack.template.json'),
+                            stackName: 'LambdaDeploymentStack',
+                            adminPermissions: true,
+                            parameterOverrides: {
+                                ...props.lambdaCode.assign(lambdaBuildOutput.s3Location),
+                            },
+                            extraInputs: [lambdaBuildOutput],
+                        }),
+                    ],
+                },
             ]
         });
+    }
+
+}
+
+//https://github.com/aws/aws-cdk/issues/5183
+class FixedStackAction extends codepipeline_actions.CloudFormationCreateUpdateStackAction {
+    bound(scope: any, stage: any, options: any): any {
+        const result = super.bound(scope, stage, options);
+        options.bucket.grantRead((this as any)._deploymentRole);
+        return result;
     }
 }

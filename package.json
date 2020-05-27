@@ -8,7 +8,8 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "cdk-local-test": "npm run cdk synth UserService-LambdasStack -- -o dist --app 'npx ts-node sample/index.ts'"
   },
   "devDependencies": {
     "@aws-cdk/assert": "1.41.0",

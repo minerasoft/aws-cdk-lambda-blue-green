@@ -9,7 +9,7 @@
   /canary deployment.
  * Pipeline - Defines the aws code pipeline
  
- There is a AppBuilder class created as a wrapper just to demonstrate how the stacks can be created in a programmatic
+ There is an AppBuilder class created as a wrapper just to demonstrate how the stacks can be created in a programmatic
   approach. Not sure if I have over-engineered it a bit :)  
 
 ## Usage
@@ -21,8 +21,8 @@
  new AppBuilder({
      appName: "UserService",
      pipelineConfig: {
-         codeCommitRepoName: 'pipeline-blue-green-test1',
-         codeCommitRepoBranchName: 'pipeline-blue-green-test1',
+         codeCommitRepoName: 'user-service',
+         codeCommitRepoBranchName: 'develop',
          lambdaBuildSpecFile: 'sample/config/lambda-buildspec.yml',
          cdkBuildSpecFile: 'sample/config/cdk-buildspec.yml'
      }

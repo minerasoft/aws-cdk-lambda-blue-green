@@ -1,3 +1,5 @@
+![Node.js CI](https://github.com/minerasoft/aws-cdk-lambda-blue-green/workflows/Node.js%20CI/badge.svg)
+
 # aws-cdk-lambda-blue-green
  CDK construct for an AWS Lambda function with blue-green/canary deployment configuration.
 

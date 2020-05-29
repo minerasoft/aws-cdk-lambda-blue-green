@@ -63,7 +63,7 @@ npm run test
 ``` 
  * List the available stacks 
 ```
-cdk list UserService-PipelineStack
+cdk list
 ```
  * View the synthesised cloud formation template and then deploy the stack
 ```

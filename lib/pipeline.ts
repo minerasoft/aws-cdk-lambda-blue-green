@@ -30,10 +30,13 @@ export interface PipelineConfig {
     codeCommitRepoBranchName?: string,
 
     /**
-     * Path to the file with build instructions in aws build spec format.
+     * Path to the file with build instructions for the lambda in the aws build spec format.
      */
     lambdaBuildSpecFile: string
 
+    /**
+     * Path to the file with build instructions for the cdk synth in the aws build spec format.
+     */
     cdkBuildSpecFile: string,
 }
 
